@@ -19,16 +19,27 @@ dem_links <- "https://fbinter.stadt-berlin.de/fb/feed/senstadt/a_dgm" %>%
 
 if(!dir.exists("atkis_dem_tiles")) dir.create("atkis_dem_tiles")
 
-pb = txtProgressBar(min = 0, max = nrow(dem_links), initial = 0, style = 3) 
+check <- multi_download(
+  dem_links$href,
+  destfiles = paste0("atkis_dem_tiles/", dem_links$title),
+  resume = T
+)
 
-for (i in 1:nrow(dem_links)) {
-  curl_download(
-    dem_links$href[i],
-    destfile = paste0("atkis_dem_tiles/", dem_links$title[i]),
-    quiet = T
+zipfiles <- list.files(
+  "atkis_dem_tiles",
+  pattern = "\\.zip$",
+  full.names = T
+)
+
+pb = txtProgressBar(min = 0, max = length(zipfiles), initial = 0, style = 3) 
+
+for (i in seq_along(zipfiles)) {
+  unzip(
+    zipfiles[i],
+    overwrite = F,
+    junkpaths = T,
+    exdir = "../MAP/data/berlin_atkis/dgm/xyztiles"
   )
   
   setTxtProgressBar(pb,i)
 }
-
-
