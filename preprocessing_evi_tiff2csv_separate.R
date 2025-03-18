@@ -21,7 +21,7 @@ for (i in file_paths) {
     na.omit()
   
   writeRaster(ras, filename = paste0(i, "_masked.tif"))
-  write_csv(ras_csv, file = paste0(i, "masked.csv"))
+  write_csv(ras_csv, file = paste0(i, "_masked.csv"))
   
   ras <- NULL
 }
