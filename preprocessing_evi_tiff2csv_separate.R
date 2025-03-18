@@ -1,21 +1,25 @@
 library(tidyverse)
 library(terra)
 
-EVIras <- list.files(
+file_paths <- list.files(
   "../MAP/data/EVI_combined", pattern = "\\.tif$", full.names = T
 )
 
-tiff2csv_save <- function(file_path){
-  ras <- rast(file_path)
+
+for (i in file_paths) {
+  writeLines(paste("Processing", i))
+  ras <- rast(i)
   
   ras_csv <- ras %>% 
     terra::as.data.frame(
       xy = T,
       cells = T,
       wide = F
-    )
+    ) %>% 
+    na.omit()
   
-  write_csv(ras_csv, file = paste0(file_path, ".csv"))
+  write_csv(ras_csv, file = paste0(i, ".csv"))
+  
+  ras <- NULL
 }
 
-mapply(tiff2csv_save, file_path = EVIras)
