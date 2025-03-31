@@ -10,7 +10,7 @@ tb_sub <- tb %>%
     landuse %in% c("forest", "meadow", "allotments", "grass", 
                    "cemetery", "village_green", "brownfield", "plant_nursery", 
                    "traffic_island", "orchard", "recreation_ground", 
-                   "flowerbed", "greenfield", "farmyard", "vineyard", 
+                   "flowerbed", "greenfield", "vineyard", 
                    "greenery", "animal_keeping", "forestry", "apiary", 
                    "tree_pit", "shrubs") |
       natural %in% c("wood", "scrub", "wetland", "grassland", "heath", "shrubbery", "shrub") |
@@ -28,7 +28,7 @@ tb_sub <- tb %>%
 # thrown out:
 # leisure: "sports_centre"
 # natural: plateau
-# landuse: farmland
+# landuse: farmland, farmyard
 
 
 #---- barplot ----
@@ -37,10 +37,8 @@ tb_sub_areas <- tb_sub %>%
   group_by(landuse, natural, leisure, sport) %>% 
   summarise(area = sum(area, na.rm = T)) %>%
   mutate(name = paste(landuse,natural,leisure,sport, sep = ", ")) %>% 
-  arrange(desc(area)) #%>% 
-  head(25)
-
-head(tb_sub_areas)
+  arrange(desc(area)) %>%
+  head(50)
 
 ggplot(
   tb_sub_areas %>% mutate,
